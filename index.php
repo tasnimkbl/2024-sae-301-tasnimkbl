@@ -1,25 +1,33 @@
-<?php
-get_header();
-if ( have_posts() ) : 
-    while ( have_posts() ) : 
-        the_post();
-        the_content();
-    endwhile;
-else : ?>
+<?php get_header(); ?>
+<main>
     <div class="homepage-message">
-        <h2>Bienvenue sur le site de sélection des projets collectifs !</h2>
-        <p>Ce site sert à sélectionner vos projets collectifs :</p>
-        <ol>
-            <li>1 – Consultez la liste des projets, interrogez les porteurs ou moi</li>
-            <li>2 – Constituez des équipes de 4 étudiants avec au moins 1 dans chaque parcours</li>
-            <li>3 – Créez-vous un compte</li>
-            <li>4 – Un d’entre vous créé une équipe et enrole les membres</li>
-            <li>5 – Faites la liste de vos 4 projets préférés</li>
-            <li>6 – Faites valider votre équipe</li>
-            <li>7 – Attendez la réponse de l’équipe pédagogique</li>
-        </ol>
-        <p>Bon projet !</p>
+        <h2>Bienvenue sur Rocket League Arena</h2>
+        <p>Rejoignez-nous pour le tournoi de Rocket League et montrez vos compétences !</p>
     </div>
-<?php endif;
-get_footer();
-
+    
+    <section class="upcoming-matches">
+        <h3>Prochains Matchs</h3>
+        <?php
+        $args = [
+            'post_type' => 'matchs',
+            'posts_per_page' => 3,
+            'orderby' => 'date',
+            'order' => 'ASC'
+        ];
+        $matchs = new WP_Query($args);
+        if ($matchs->have_posts()) {
+            while ($matchs->have_posts()) {
+                $matchs->the_post(); ?>
+                <div class="card">
+                    <h4><?php the_title(); ?></h4>
+                    <p><?php the_content(); ?></p>
+                </div>
+            <?php }
+            wp_reset_postdata();
+        } else {
+            echo '<p>Aucun match à venir.</p>';
+        }
+        ?>
+    </section>
+</main>
+<?php get_footer(); ?>
